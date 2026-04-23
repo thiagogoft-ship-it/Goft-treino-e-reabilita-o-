@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treino de Perna</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f1ec;
+    --card: #ffffff;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0eb;
+    --accent2: #c8a96e;
+    --text: #1a1a1a;
+    --muted: #7a7a7a;
+    --border: #e0dbd3;
+    --pain-low: #4caf8a;
+    --pain-mid: #f5a623;
+    --pain-high: #e05252;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 16px 60px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 100px;
+    margin-bottom: 12px;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 6vw, 44px);
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 8px;
+    font-weight: 300;
+  }
+
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: var(--accent2);
+    border-radius: 2px;
+    margin: 16px auto 0;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .section-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  .section-label .icon {
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* EXERCISE CARD */
+  .exercise-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 22px 20px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s;
+  }
+
+  .exercise-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .ex-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+
+  .ex-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .ex-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .ex-badge {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* SETS TABLE */
+  .sets-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .sets-table thead th {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 8px 8px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sets-table thead th:first-child {
+    text-align: left;
+    padding-left: 0;
+  }
+
+  .sets-table tbody tr td {
+    padding: 8px 8px;
+    text-align: center;
+    border-bottom: 1px solid #f0ede8;
+  }
+
+  .sets-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .sets-table tbody tr td:first-child {
+    text-align: left;
+    padding-left: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .sets-table input[type="number"],
+  .sets-table input[type="text"] {
+    width: 70px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    text-align: center;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .sets-table input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(45,90,61,0.1);
+  }
+
+  /* PAIN SCALE */
+  .pain-scale {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+  }
+
+  .pain-scale input[type="radio"] { display: none; }
+
+  .pain-scale label {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--muted);
+    background: var(--bg);
+  }
+
+  .pain-scale input[value="1"]:checked ~ label[for$="-1"],
+  .pain-scale input[value="2"]:checked ~ label[for$="-2"],
+  .pain-scale input[value="3"]:checked ~ label[for$="-3"] {
+    background: var(--pain-low);
+    border-color: var(--pain-low);
+    color: #fff;
+  }
+
+  .pain-scale input[value="4"]:checked ~ label[for$="-4"],
+  .pain-scale input[value="5"]:checked ~ label[for$="-5"],
+  .pain-scale input[value="6"]:checked ~ label[for$="-6"] {
+    background: var(--pain-mid);
+    border-color: var(--pain-mid);
+    color: #fff;
+  }
+
+  .pain-scale input[value="7"]:checked ~ label[for$="-7"],
+  .pain-scale input[value="8"]:checked ~ label[for$="-8"],
+  .pain-scale input[value="9"]:checked ~ label[for$="-9"],
+  .pain-scale input[value="10"]:checked ~ label[for$="-10"] {
+    background: var(--pain-high);
+    border-color: var(--pain-high);
+    color: #fff;
+  }
+
+  .pain-scale label:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: scale(1.15);
+  }
+
+  /* PAIN DISPLAY INLINE */
+  .pain-inline {
+    display: flex;
+    gap: 3px;
+  }
+  .pain-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--muted);
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+
+  /* BIKE SECTION */
+  .bike-section {
+    background: var(--accent);
+    border-radius: var(--radius);
+    padding: 24px 20px 20px;
+    color: #fff;
+    margin-top: 28px;
+  }
+
+  .bike-section .section-title {
+    color: #fff;
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .bike-section .section-sub {
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 20px;
+  }
+
+  .bike-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .bike-chip {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    backdrop-filter: blur(4px);
+  }
+
+  .bike-series {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .bike-row {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: grid;
+    grid-template-columns: 60px 1fr 1fr;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bike-row-label {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+
+  .bike-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .bike-field label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    font-weight: 600;
+  }
+
+  .bike-field input {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px;
+    color: #fff;
+    padding: 6px 10px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    text-align: center;
+    outline: none;
+    width: 100%;
+    transition: background 0.2s;
+  }
+
+  .bike-field input::placeholder { color: rgba(255,255,255,0.4); }
+  .bike-field input:focus { background: rgba(255,255,255,0.25); }
+
+  /* Active recovery note */
+  .recovery-note {
+    margin-top: 16px;
+    background: rgba(200,169,110,0.25);
+    border: 1px solid rgba(200,169,110,0.4);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.5;
+  }
+
+  .recovery-note strong { color: var(--accent2); }
+
+  /* NOTES BOX */
+  .notes-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .notes-box label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .notes-box textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .notes-box textarea:focus { border-color: var(--accent); }
+
+  /* PRINT BTN */
+  .print-btn {
+    display: block;
+    width: 100%;
+    max-width: 260px;
+    margin: 28px auto 0;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+
+  .print-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .print-btn:active { transform: translateY(0); }
+
+  @media print {
+    body { padding: 16px; background: #fff; }
+    .print-btn { display: none; }
+    .exercise-card { break-inside: avoid; }
+  }
+
+  @media (max-width: 480px) {
+    .sets-table input[type="number"],
+    .sets-table input[type="text"] { width: 58px; }
+    .pain-dot { width: 20px; height: 20px; font-size: 8px; }
+    .bike-row { grid-template-columns: 50px 1fr 1fr; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="tag">Treino Terapêutico</div>
+    <h1>Fortalecimento<br>de Membros Inferiores</h1>
+    <p>Preencha as cargas utilizadas e a dor sentida em cada série</p>
+    <div class="divider"></div>
+  </header>
+
+  <!-- MUSCULAÇÃO -->
+  <div class="section-label">
+    <div class="icon">🏋️</div>
+    <div>
+      <div class="section-title">Musculação</div>
+      <div class="section-sub">3 séries · 10–15 repetições &nbsp;|&nbsp; Cadeira Extensora: 4 séries</div>
+    </div>
+  </div>
+
+  <!-- CARD TEMPLATE FUNCTION (via HTML repetition) -->
+
+  <!-- 1. CADEIRA ABDUTORA -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div>
+        <div class="ex-name">Cadeira Abdutora</div>
+        <div class="ex-note">Movimento controlado, sem compensação de tronco</div>
+      </div>
+      <div class="ex-badge">3 × 10–15</div>
+    </div>
+    <table class="sets-table">
+      <thead>
+        <tr>
+          <th>Série</th>
+          <th>Carga (kg)</th>
+          <th>Reps feitas</th>
+          <th>Dor (1–10)</th>
+        </tr>
+      </thead>
+      <tbody id="abd1-rows"></tbody>
+    </table>
+  </div>
+
+  <!-- 2. CADEIRA ADUTORA -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div>
+        <div class="ex-name">Cadeira Adutora</div>
+        <div class="ex-note">Amplitude completa, retorno lento e controlado</div>
+      </div>
+      <div class="ex-badge">3 × 10–15</div>
+    </div>
+    <table class="sets-table">
+      <thead>
+        <tr>
+          <th>Série</th>
+          <th>Carga (kg)</th>
+          <th>Reps feitas</th>
+          <th>Dor (1–10)</th>
+        </tr>
+      </thead>
+      <tbody id="adu-rows"></tbody>
+    </table>
+  </div>
+
+  <!-- 3. CADEIRA FLEXORA -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div>
+        <div class="ex-name">Cadeira Flexora</div>
+        <div class="ex-note">Cadência controlada nas duas fases do movimento</div>
+      </div>
+      <div class="ex-badge">3 × 10–15</div>
+    </div>
+    <table class="sets-table">
+      <thead>
+        <tr>
+          <th>Série</th>
+          <th>Carga (kg)</th>
+          <th>Reps feitas</th>
+          <th>Dor (1–10)</th>
+        </tr>
+      </thead>
+      <tbody id="flex-rows"></tbody>
+    </table>
+  </div>
+
+  <!-- 4. CADEIRA EXTENSORA -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div>
+        <div class="ex-name">Cadeira Extensora</div>
+        <div class="ex-note">Carga progressiva a cada série. Foco em aumentar percepção de esforço sem dor articular. Cadência controlada.</div>
+      </div>
+      <div class="ex-badge">4 × 10–15</div>
+    </div>
+    <table class="sets-table">
+      <thead>
+        <tr>
+          <th>Série</th>
+          <th>Carga (kg)</th>
+          <th>Reps feitas</th>
+          <th>Dor (1–10)</th>
+        </tr>
+      </thead>
+      <tbody id="ext-rows"></tbody>
+    </table>
+  </div>
+
+  <!-- 5. FLEXÃO PLANTAR -->
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div>
+        <div class="ex-name">Flexão Plantar Unilateral</div>
+        <div class="ex-note">Pode adicionar carga com halter. Suba devagar, desça ainda mais devagar.</div>
+      </div>
+      <div class="ex-badge">3 × 10–15</div>
+    </div>
+    <table class="sets-table">
+      <thead>
+        <tr>
+          <th>Série</th>
+          <th>Carga (kg)</th>
+          <th>Reps feitas</th>
+          <th>Dor (1–10)</th>
+        </tr>
+      </thead>
+      <tbody id="plantar-rows"></tbody>
+    </table>
+  </div>
+
+  <!-- BIKE -->
+  <div class="bike-section">
+    <div class="section-title">🚴 Treino na Bike</div>
+    <div class="section-sub">Complementar · Cardio de Alta Intensidade</div>
+    <div class="bike-meta">
+      <span class="bike-chip">5 séries</span>
+      <span class="bike-chip">30–40 seg por série</span>
+      <span class="bike-chip">Velocidade alta</span>
+      <span class="bike-chip">1 min descanso</span>
+      <span class="bike-chip">Resistência 6 → 12</span>
+    </div>
+
+    <div class="bike-series" id="bike-series"></div>
+
+    <div class="recovery-note">
+      <strong>Recuperação ativa:</strong> Durante o descanso, pode pedalar bem devagar e sem carga — isso ajuda a tirar o ácido lático e mantém o corpo ativo entre as séries.
+    </div>
+  </div>
+
+  <!-- OBSERVAÇÕES -->
+  <div class="notes-box">
+    <label>📝 Observações do treino</label>
+    <textarea placeholder="Como você se sentiu hoje? Algo que dificultou o treino? Anotações extras..."></textarea>
+  </div>
+
+  <button class="print-btn" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+
+</div>
+
+<script>
+  // ─── HELPERS ───────────────────────────────────────────────────────────────
+
+  function painDots(id) {
+    let html = '<div class="pain-inline">';
+    for (let i = 1; i <= 10; i++) {
+      const color = i <= 3 ? '#4caf8a' : i <= 6 ? '#f5a623' : '#e05252';
+      html += `
+        <div class="pain-dot" 
+             style="cursor:pointer;"
+             data-val="${i}"
+             data-id="${id}"
+             title="Dor ${i}"
+             onclick="selectPain('${id}', ${i})">
+          ${i}
+        </div>`;
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function selectPain(id, val) {
+    const dots = document.querySelectorAll(`[data-id="${id}"]`);
+    dots.forEach(d => {
+      const v = parseInt(d.dataset.val);
+      const color = v <= 3 ? '#4caf8a' : v <= 6 ? '#f5a623' : '#e05252';
+      if (v <= val) {
+        d.style.background = color;
+        d.style.borderColor = color;
+        d.style.color = '#fff';
+      } else {
+        d.style.background = '';
+        d.style.borderColor = '';
+        d.style.color = '';
+      }
+    });
+  }
+
+  function buildRows(tbodyId, numSets) {
+    const tbody = document.getElementById(tbodyId);
+    for (let i = 1; i <= numSets; i++) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>Série ${i}</td>
+        <td><input type="number" min="0" step="0.5" placeholder="—" /></td>
+        <td><input type="number" min="0" max="20" placeholder="—" /></td>
+        <td>${painDots(tbodyId + '-s' + i)}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+
+  // ─── BUILD MUSCULAÇÃO ──────────────────────────────────────────────────────
+  buildRows('abd1-rows', 3);
+  buildRows('adu-rows', 3);
+  buildRows('flex-rows', 3);
+  buildRows('ext-rows', 4);
+  buildRows('plantar-rows', 3);
+
+  // ─── BUILD BIKE ───────────────────────────────────────────────────────────
+  const bikeContainer = document.getElementById('bike-series');
+  for (let i = 1; i <= 5; i++) {
+    const div = document.createElement('div');
+    div.className = 'bike-row';
+    div.innerHTML = `
+      <div class="bike-row-label">Série ${i}</div>
+      <div class="bike-field">
+        <label>Resistência</label>
+        <input type="number" min="1" max="20" placeholder="${5 + i}" />
+      </div>
+      <div class="bike-field">
+        <label>Duração (seg)</label>
+        <input type="number" min="20" max="60" placeholder="30–40" />
+      </div>
+    `;
+    bikeContainer.appendChild(div);
+  }
+</script>
+</body>
+</html>
